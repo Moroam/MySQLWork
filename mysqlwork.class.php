@@ -256,10 +256,11 @@ class MySQLWork
   /**
    * Format value for working with sql
    *
-   * @param string $value
+   * @param mixed $value
    * @return string
    */
-  public function test(string $value) : string {
+  public function test( $value ) : string {
+    $date = strval($value);
     $data = trim($value);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
