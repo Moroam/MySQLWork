@@ -132,8 +132,8 @@ class MySQLWork
    * @throws mysqli_sql_exception If any mysqli function failed due to mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT)
    */
   public function fieldsArray(mysqli_result $query ) : array {
-    $finfo = $query->fetch_fields();
-    foreach ($finfo as $val ) {
+    $names = [];
+    foreach ($query->fetch_fields() as $val ) {
       $names[] = $val->name;
     }
     return $names;
@@ -188,7 +188,7 @@ class MySQLWork
    * @return array
    * @throws mysqli_sql_exception If any mysqli function failed due to mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT)
    */
-  function array(mysqli_result $query, bool $assoc = TRUE, bool $free = TRUE) : array {
+  public function array(mysqli_result $query, bool $assoc = TRUE, bool $free = TRUE) : array {
     $arr = [];
     $query->data_seek(0);
 
@@ -215,7 +215,7 @@ class MySQLWork
    * @return array
    * @throws mysqli_sql_exception If any mysqli function failed due to mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT)
    */
-  function arraySQL(string $sql, bool $assoc = TRUE, bool $free = TRUE) : array {
+  public function arraySQL(string $sql, bool $assoc = TRUE, bool $free = TRUE) : array {
     return $this->array($this->query($sql), $assoc, $free);
   }
 
@@ -229,9 +229,8 @@ class MySQLWork
    * @throws mysqli_sql_exception If any mysqli function failed due to mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT)
    */
   public function array2(string $sql) : array {
-    $a = $this->arraySQL($sql, FALSE);
-
-    return array_combine(array_column($a, 0), array_column($a, 1));
+    $arr = $this->arraySQL($sql, FALSE);
+    return array_combine(array_column($arr, 0), array_column($arr, 1));
   }
 
 
@@ -260,8 +259,8 @@ class MySQLWork
    * @return string
    */
   public function test( $value ) : string {
-    $date = strval($value);
-    $data = trim($value);
+    $data = strval($value);
+    $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
 
